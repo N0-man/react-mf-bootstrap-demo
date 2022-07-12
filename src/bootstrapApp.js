@@ -1,48 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
 
 export const bootstrapApp = () => {
-  // const bahmniOldMedicationContainerSelector =
-  //   'treatment-page treatment-page-container order-list clearfix';
-  const bahmniOldMedicationContainerSelector = '[rip-ui="medication"]';
+  const mfContainerId = 'mf-root'
 
   ReactDOM.render(
     <React.StrictMode>
       <App />
     </React.StrictMode>,
-    resolveMedicationContainer()
-  );
+    resolveMfContainer(),
+  )
 
-  function resolveMedicationContainer() {
-    const consultationContainer = document.querySelectorAll(
-      '[mf-container="medication"]'
-    );
-    // const consultationContainer = document.getElementsByClassName(
-    //   'consultation-content'
-    // );
-    if (consultationContainer.length > 0) {
-      removeOldMedicationContainer();
-      return createNewMedicationContainer();
-    }
+  function resolveMfContainer() {
+    if (!isMFContainerPresent()) return createNewMedicationContainer()
 
-    return document.getElementById('bahmni-medication');
+    return document.getElementById(mfContainerId)
 
     function createNewMedicationContainer() {
-      const newMedicationContainer = document.createElement('div');
-      newMedicationContainer.setAttribute('id', 'bahmni-medication');
-      consultationContainer[0].appendChild(newMedicationContainer);
-      return newMedicationContainer;
+      const body = document.getElementsByTagName('body')[0]
+      const mfContainer = document.createElement('div')
+      mfContainer.setAttribute('id', mfContainerId)
+      body.appendChild(mfContainer)
+      return mfContainer
     }
 
-    function removeOldMedicationContainer() {
-      // const oldMedicationContainer = document.getElementsByClassName(
-      //   bahmniOldMedicationContainerSelector
-      // );
-      const oldMedicationContainer = document.querySelectorAll(
-        bahmniOldMedicationContainerSelector
-      );
-      if (oldMedicationContainer.length > 0) oldMedicationContainer[0].remove();
+    function isMFContainerPresent() {
+      return document.getElementById(mfContainerId)
     }
   }
-};
+}
